@@ -1,6 +1,6 @@
 {
-  "id": "c6cf538c-be4d-4360-ae32-37e0e05d97bd",
-  "prevId": "04b0feeb-62f1-4277-a2af-8f256b3967b4",
+  "id": "18e4fd8a-ea70-4649-9364-eec3cae65e5b",
+  "prevId": "83c08c03-84bc-48b6-aea8-a3b32a984253",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -19,13 +19,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {},
@@ -65,13 +58,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {},
@@ -86,7 +72,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "user_favorite_cities_city_id_cities_id_fk": {
@@ -99,7 +85,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },

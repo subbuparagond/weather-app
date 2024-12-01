@@ -9,19 +9,21 @@ export const usersTable = pgTable("users", {
 export const citiesTable = pgTable("cities", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  user_id: integer("user_id") 
+    .notNull()
+    .references(() => usersTable.id), 
 });
 
-export const userFavoriteCitiesTable = pgTable("user_favorite_cities", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => usersTable.id, { onDelete: "cascade" }),
-  cityId: integer("city_id")
-    .notNull()
-    .references(() => citiesTable.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+
+  export const userFavoriteCitiesTable = pgTable("user_favorite_cities", {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => usersTable.id),
+    cityId: integer("city_id")
+      .notNull()
+      .references(() => citiesTable.id),
+  });
 
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;

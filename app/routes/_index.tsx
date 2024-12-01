@@ -1,17 +1,11 @@
+import { useState } from "react";
 import { Form, json, useActionData, redirect } from "@remix-run/react";
 import { createCookieSessionStorage } from "@remix-run/node";
 import { db } from "server/db";
 import { usersTable } from "server/db/schema";
 import { eq } from "drizzle-orm";
-import {
-  Box,
-  Button,
-  Container,
-  TextField,
-  Typography,
-  Link,
-  Alert,
-} from "@mui/material";
+import { Box, Container, TextField, Typography, Link, Alert, CircularProgress } from "@mui/material";
+import { Button } from "~/components/ui/button";
 
 export const { getSession, commitSession } = createCookieSessionStorage({
   cookie: {
@@ -49,6 +43,11 @@ export async function action({ request }: { request: Request }) {
 
 export default function LoginPage() {
   const actionData = useActionData<{ error?: string }>();
+  const [isSubmitting, setIsSubmitting] = useState(false); // State to track form submission
+
+  const handleSubmit = (e: React.FormEvent) => {
+    setIsSubmitting(true); // Set submitting state to true
+  };
 
   return (
     <Container
@@ -56,41 +55,73 @@ export default function LoginPage() {
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-between",
         height: "100vh",
-        flexDirection: { xs: "column", lg: "row" },
+        flexDirection: { xs: "column", sm: "row" },
         bgcolor: "background.default",
       }}
     >
+    
+      <Box
+        sx={{
+          flex: 1,
+          textAlign: "center",
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          bgcolor: "background.paper",
+          borderRadius: 2,
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          Hi, Welcome Back
+        </Typography>
+        <img
+          src="/login.svg"
+          alt="Welcome illustration"
+          style={{ maxWidth: "40%", height: "auto" }}
+        />
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          Transforming your experience with{" "}
+          <Link href="http://my-weather-app.com" target="_blank" underline="hover">
+            Our App
+          </Link>
+        </Typography>
+      </Box>
+
+     
       <Box
         sx={{
           flex: 1,
           display: "flex",
           justifyContent: "center",
-          p: 2,
+          p: 4,
         }}
       >
         <Box
           sx={{
-            maxWidth: 600, // Wider form
-            p: 4, // More padding for better spacing
+            maxWidth: 400,
+            width: "100%",
+            p: 4,
             border: 1,
             borderRadius: 2,
             borderColor: "divider",
             bgcolor: "background.paper",
+            boxShadow: 3,
           }}
         >
           <Typography variant="h5" component="h2" gutterBottom>
             Sign in to Your App
           </Typography>
-          <Typography variant="body2" gutterBottom>
-            New User?{" "}
-            <Link href="/" underline="hover">
-              Contact Support
-            </Link>
-          </Typography>
-          <Form method="post">
+
+          <Form method="post" onSubmit={handleSubmit}>
             <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                Username
+              </Typography>
               <TextField
                 fullWidth
                 id="username"
@@ -100,6 +131,9 @@ export default function LoginPage() {
               />
             </Box>
             <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                Password
+              </Typography>
               <TextField
                 fullWidth
                 id="password"
@@ -114,39 +148,15 @@ export default function LoginPage() {
                 {actionData.error}
               </Alert>
             )}
-            <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              fullWidth
-              sx={{ py: 1 }}
-            >
-              Login
+            <Button type="submit" variant="default" className="w-full flex-end">
+              {isSubmitting ? (
+                <CircularProgress size={24} sx={{ color: "white" }} />
+              ) : (
+                "Login"
+              )}
             </Button>
           </Form>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          flex: 1,
-          textAlign: "center",
-          p: 2,
-        }}
-      >
-        <Typography variant="h4" gutterBottom>
-          Hi, Welcome Back
-        </Typography>
-        <img
-          src="./public/laptop.svg"
-          alt="Welcome illustration"
-          style={{ maxWidth: "100%", height: "auto" }}
-        />
-        <Typography variant="body1" sx={{ mt: 2 }}>
-          Transforming your experience with{" "}
-          <Link href="http://my-weather-app.com" target="_blank" underline="hover">
-            Our App
-          </Link>
-        </Typography>
       </Box>
     </Container>
   );
